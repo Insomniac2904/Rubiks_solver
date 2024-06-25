@@ -1,39 +1,58 @@
 #include <bits/stdc++.h>
-//#include "Model/RubiksCube3dArray.cpp"
-//#include "Model/RubiksCube1dArray.cpp"
-//#include "Model/RubiksCubeBitboard.cpp"
+#include "Model/RubiksCube3dArray.cpp"
 #include "Solver/DFSSolver.h"
 #include "Solver/BFSSolver.h"
 #include "Solver/IDDFSSolver.h"
 #include "Solver/IDAstarSolver.h"
-//#include "PatternDatabases/CornerPatternDatabase.h"
-#include "PatternDatabases/CornerDBMaker.h"
+// #include "PatternDatabases/CornerPatternDatabase.h"
+// #include "PatternDatabases/CornerDBMaker.h"
 
 using namespace std;
 
 int main() {
-//    RubiksCube3dArray object3DArray;
-//    RubiksCube1dArray object1dArray;
-//    RubiksCubeBitboard objectBitboard;
-//
-//    object3DArray.print();
-//
-//    if (object3DArray.isSolved()) cout << "SOLVED\n\n";
-//    else cout << "NOT SOLVED\n\n";
-//
-//    if (object1dArray.isSolved()) cout << "SOLVED\n\n";
-//    else cout << "NOT SOLVED\n\n";
-//
-//    if (objectBitboard.isSolved()) cout << "SOLVED\n\n";
-//    else cout << "NOT SOLVED\n\n";
-//
-//    objectBitboard.u();
-//    object3DArray.u();
-//    object1dArray.u();
-//    objectBitboard.print();
-//    object3DArray.print();
-//    object1dArray.print();
-//
+    RubiksCube3dArray object3DArray;
+    // RubiksCube1dArray object1dArray;
+
+    object3DArray.print();
+    vector<RubiksCube::MOVE>shuffle = object3DArray.randomShuffleCube((3));
+
+    cout<<"AFTER SHUFFLE THE CUBE IS: \n";
+    object3DArray.print();
+
+    DFSSolver<RubiksCube3dArray,Hash3d>dfs_solver(object3DArray,4);
+    vector<RubiksCube::MOVE>dfsMoves = dfs_solver.solve();
+    dfs_solver.rubiksCube.print();
+    for(auto move:shuffle) cout<<object3DArray.getMove(move)<<" ";
+    cout<<"\n";
+    for(auto move:dfsMoves) cout<<object3DArray.getMove(move)<<" ";
+    cout<<"\n";
+
+
+    // object3DArray.print();
+    // vector<RubiksCube::MOVE>shuffledMove =  object3DArray.randomShuffleCube(3);
+    // for(auto move:shuffledMove)
+    // {
+    //     cout<<object3DArray.getMove(move)<<" ";
+    // }
+    // cout<<"\n ====================== \n";
+    // object3DArray.print();
+    //
+    // if (object3DArray.isSolved()) cout << "SOLVED\n\n";
+    // else cout << "NOT SOLVED\n\n";
+
+    // if (object1dArray.isSolved()) cout << "SOLVED\n\n";
+    // else cout << "NOT SOLVED\n\n";
+
+    // if (objectBitboard.isSolved()) cout << "SOLVED\n\n";
+    // else cout << "NOT SOLVED\n\n";
+
+    // objectBitboard.u();
+    // object3DArray.u();
+    // object1dArray.u();
+    // objectBitboard.print();
+    // object3DArray.print();
+    // object1dArray.print();
+
 //    objectBitboard.l();
 //    object3DArray.l();
 //    object1dArray.l();
@@ -263,22 +282,22 @@ int main() {
 // CornerDBMaker Testing --------------------------------------------------------------------------
     string fileName = "C:\\Users\\user\\CLionProjects\\rubiks-cube-solver\\Databases\\cornerDepth5V1.txt";
 
-//    Code to create Corner Database
-//    CornerDBMaker dbMaker(fileName, 0x99);
-//    dbMaker.bfsAndStore();
+    //    Code to create Corner Database
+    //    CornerDBMaker dbMaker(fileName, 0x99);
+    //    dbMaker.bfsAndStore();
 
-    RubiksCubeBitboard cube;
-    auto shuffleMoves = cube.randomShuffleCube(13);
-    cube.print();
-    for (auto move: shuffleMoves) cout << cube.getMove(move) << " ";
-    cout << "\n";
-
-    IDAstarSolver<RubiksCubeBitboard, HashBitboard> idaStarSolver(cube, fileName);
-    auto moves = idaStarSolver.solve();
-
-    idaStarSolver.rubiksCube.print();
-    for (auto move: moves) cout << cube.getMove(move) << " ";
-    cout << "\n";
+    // RubiksCubeBitboard cube;
+    // auto shuffleMoves = cube.randomShuffleCube(13);
+    // cube.print();
+    // for (auto move: shuffleMoves) cout << cube.getMove(move) << " ";
+    // cout << "\n";
+    //
+    // IDAstarSolver<RubiksCubeBitboard, HashBitboard> idaStarSolver(cube, fileName);
+    // auto moves = idaStarSolver.solve();
+    //
+    // idaStarSolver.rubiksCube.print();
+    // for (auto move: moves) cout << cube.getMove(move) << " ";
+    // cout << "\n";
 
 
     return 0;

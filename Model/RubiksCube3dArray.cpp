@@ -5,11 +5,13 @@ private:
 
     void rotateFace(int ind) {
         char temp_arr[3][3] = {};
+        // * getting the face in another 2d matrix
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 temp_arr[i][j] = cube[ind][i][j];
             }
         }
+        //* applying the transformation on the face
         for (int i = 0; i < 3; i++) cube[ind][0][i] = temp_arr[2 - i][0];
         for (int i = 0; i < 3; i++) cube[ind][i][2] = temp_arr[0][i];
         for (int i = 0; i < 3; i++) cube[ind][2][2 - i] = temp_arr[i][2];
@@ -19,6 +21,10 @@ private:
 public:
     char cube[6][3][3]{};
 
+    /*
+    * The constructor called to make the 3d rubiks cube 
+    */
+   
     RubiksCube3dArray() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 3; j++) {
@@ -27,6 +33,10 @@ public:
             }
         }
     }
+
+    /*
+        * override the virtual function in the abstract class 
+    */
 
     COLOR getColor(FACE face, unsigned row, unsigned col) const override {
         char color = cube[int(face)][row][col];
@@ -46,6 +56,9 @@ public:
         }
     }
 
+    /*
+        * to check if the cube issolved or not
+    */
     bool isSolved() const override {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 3; j++) {
@@ -58,20 +71,26 @@ public:
         return true;
     }
 
+    /*
+        * Declaring the corresponting resultant state for each move in 3d representation
+    */
     RubiksCube &u() override {
+        // *  up move so only the top face will be rotated and its idex value = 0
         this->rotateFace(0);
 
-        char temp_arr[3] = {};
-        for (int i = 0; i < 3; i++) temp_arr[i] = cube[4][0][2 - i];
+        char temp_arr[3] = {}; //* To store the edge piece that shares edge with the top face
+        for (int i = 0; i < 3; i++) temp_arr[i] = cube[4][0][2 - i]; // * top row left face
         for (int i = 0; i < 3; i++) cube[4][0][2 - i] = cube[1][0][2 - i];
         for (int i = 0; i < 3; i++) cube[1][0][2 - i] = cube[2][0][2 - i];
         for (int i = 0; i < 3; i++) cube[2][0][2 - i] = cube[3][0][2 - i];
         for (int i = 0; i < 3; i++) cube[3][0][2 - i] = temp_arr[i];
 
-        return *this;
+        return *this; // * return the updates cube
     }
 
     RubiksCube &uPrime() override {
+        // * 3 clockwise  =  1 anti-clockwise
+
         this->u();
         this->u();
         this->u();
@@ -80,6 +99,7 @@ public:
     }
 
     RubiksCube &u2() override {
+        //
         this->u();
         this->u();
 
@@ -226,6 +246,7 @@ public:
         return *this;
     }
 
+    // * oveloading the == operator -> use in mapping
     bool operator==(const RubiksCube3dArray &r1) const {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 3; j++) {
@@ -237,6 +258,7 @@ public:
         return true;
     }
 
+    // * oveloading the = operator -> to set the value
     RubiksCube3dArray &operator=(const RubiksCube3dArray &r1) {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 3; j++) {
@@ -250,6 +272,9 @@ public:
 };
 
 struct Hash3d {
+
+    //* make a hashing function cube -> string -> hash using stl
+    // * size_t ensures that the output can be fit in it
     size_t operator()(const RubiksCube3dArray &r1) const {
         string str = "";
         for (int i = 0; i < 6; i++) {
@@ -259,7 +284,7 @@ struct Hash3d {
                 }
             }
         }
-        return hash<string>()(str);
+        return hash<string>()(str); // * -> returns a hash of the string for used in map
     }
 
 };

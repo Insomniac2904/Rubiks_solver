@@ -1,5 +1,3 @@
-
-
 #include "CornerDBMaker.h"
 
 using namespace std;

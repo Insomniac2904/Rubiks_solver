@@ -1,4 +1,3 @@
-
 #include "bits/stdc++.h"
 
 #ifndef RUBIKS_CUBE_SOLVER_RUBIKSCUBE_H
@@ -35,6 +34,7 @@ public:
     };
 
     enum class MOVE {
+        // * move2 -> moving making a move 2 time clockwise
         L, LPRIME, L2,
         R, RPRIME, R2,
         U, UPRIME, U2,

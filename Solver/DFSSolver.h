@@ -1,7 +1,7 @@
 
 
 #include<bits/stdc++.h>
-#include "../Model/RubiksCube.h"
+
 
 #ifndef RUBIKS_CUBE_SOLVER_DFSSOLVER_H
 #define RUBIKS_CUBE_SOLVER_DFSSOLVER_H
@@ -31,7 +31,7 @@ private:
     }
 
 public:
-    T rubiksCube;
+    T rubiksCube;  // * -> rubiks cube of type T(1D,2D,3D)
 
     DFSSolver(T _rubiksCube, int _max_search_depth = 8) {
         rubiksCube = _rubiksCube;

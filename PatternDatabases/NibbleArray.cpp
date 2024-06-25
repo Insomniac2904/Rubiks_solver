@@ -2,17 +2,19 @@
 #include "NibbleArray.h"
 
 using namespace std;
+// constructor
+NibbleArray::NibbleArray(const size_t size, const uint8_t val) : size(size), arr(size / 2 + 1, val) {
 
-NibbleArray::NibbleArray(const size_t size, const uint8_t val) :
-        size(size), arr(size / 2 + 1, val) {
 }
 
 uint8_t NibbleArray::get(const size_t pos) const {
     size_t i = pos / 2;
-    assert(pos <= this->size);
+    assert(pos <= this->size); // used to test assumptions made by the program -> false, the program will terminate and print an error message indicating the assertion that failed
+
     uint8_t val = this->arr.at(i);
 
 //    Odd pos: last 4 bits
+     // 0x0F = 00001111
     if (pos % 2) {
         return val & 0x0F;
     }

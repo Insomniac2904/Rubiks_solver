@@ -1,4 +1,3 @@
-
 #include "RubiksCube.h"
 
 //
@@ -154,6 +153,7 @@ RubiksCube &RubiksCube::invert(MOVE ind) {
     }
 }
 
+//* printing the cube
 void RubiksCube::print() const {
     cout << "Rubik's Cube:\n\n";
 
@@ -303,6 +303,8 @@ uint8_t RubiksCube::getCornerIndex(uint8_t ind) const {
     }
     return ret;
 }
+
+
 
 uint8_t RubiksCube::getCornerOrientation(uint8_t ind) const {
     string corner = getCornerColorString(ind);
