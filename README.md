@@ -38,3 +38,10 @@ Here is a demonstration of the solver applied to a Rubik's Cube shuffled <b>6 ti
 - There are cases where the **DFS solver fails** to find a solution within the allowed max depth.
 - The IDDFS and IDA* algorithms consistently produce optimal results in **less than 11 seconds**. ⏳✨🎮
 
+---
+
+## 📜 Reference
+
+This project is based on the research paper:🔗 "Finding Optimal Solutions to Rubik’s Cube Using Pattern Databases" by Richard Korf.
+
+
