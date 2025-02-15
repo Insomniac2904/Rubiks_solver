@@ -4,29 +4,118 @@
 #include "Solver/BFSSolver.h"
 #include "Solver/IDDFSSolver.h"
 #include "Solver/IDAstarSolver.h"
-// #include "PatternDatabases/CornerPatternDatabase.h"
-// #include "PatternDatabases/CornerDBMaker.h"
+#include "PatternDatabases/CornerPatternDatabase.h"
+#include "PatternDatabases/CornerDBMaker.h"
 
+class RubiksCubeBitboard;
+struct HashBitboard;
 using namespace std;
-
+using namespace std::chrono;
 int main() {
+
+    string fileName = "/home/adarsh/Desktop/Rubiks_solver-main/Database/cornerDepth5V1.txt";
     RubiksCube3dArray object3DArray;
-    // RubiksCube1dArray object1dArray;
 
-    object3DArray.print();
-    vector<RubiksCube::MOVE>shuffle = object3DArray.randomShuffleCube((3));
-
-    cout<<"AFTER SHUFFLE THE CUBE IS: \n";
+    // Shuffle the cube
+    vector<RubiksCube::MOVE> shuffle_moves = object3DArray.randomShuffleCube(6);
+    cout << "AFTER SHUFFLING THE CUBE 6 TIMES:\n";
     object3DArray.print();
 
-    DFSSolver<RubiksCube3dArray,Hash3d>dfs_solver(object3DArray,4);
-    vector<RubiksCube::MOVE>dfsMoves = dfs_solver.solve();
+    cout << "SHUFFLE MOVES OF THE CUBE: ";
+    for (auto move : shuffle_moves) cout << object3DArray.getMove(move) << " ";
+    cout << "\n";
+
+    // DFS Solver
+    auto start = high_resolution_clock::now();
+    DFSSolver<RubiksCube3dArray, Hash3d> dfs_solver(object3DArray, 7);
+    vector<RubiksCube::MOVE> dfs_moves = dfs_solver.solve();
+    auto stop = high_resolution_clock::now();
+    auto dfs_time = duration_cast<milliseconds>(stop - start).count();
+
+    cout << "DFS OUTPUT:\n";
     dfs_solver.rubiksCube.print();
-    for(auto move:shuffle) cout<<object3DArray.getMove(move)<<" ";
-    cout<<"\n";
-    for(auto move:dfsMoves) cout<<object3DArray.getMove(move)<<" ";
-    cout<<"\n";
+    cout << "DFS MOVES: ";
+    for (auto move : dfs_moves) cout << object3DArray.getMove(move) << " ";
+    cout << "\nTime Taken (ms): " << dfs_time << "\n";
 
+    // IDDFS Solver
+    start = high_resolution_clock::now();
+    IDDFSSolver<RubiksCube3dArray, Hash3d> iddfs_solver(object3DArray, 7);
+    vector<RubiksCube::MOVE> iddfs_moves = iddfs_solver.solve();
+    stop = high_resolution_clock::now();
+    auto iddfs_time = duration_cast<milliseconds>(stop - start).count();
+
+    cout << "IDDFS OUTPUT:\n";
+    iddfs_solver.rubiksCube.print();
+    cout << "IDDFS MOVES: ";
+    for (auto move : iddfs_moves) cout << object3DArray.getMove(move) << " ";
+    cout << "\nTime Taken (ms): " << iddfs_time << "\n";
+
+    // IDA* Solver
+    start = high_resolution_clock::now();
+    IDAstarSolver<RubiksCube3dArray, Hash3d> ida_solver(object3DArray, fileName);
+    vector<RubiksCube::MOVE> ida_moves = ida_solver.solve();
+    stop = high_resolution_clock::now();
+    auto ida_time = duration_cast<milliseconds>(stop - start).count();
+
+    cout << "IDA* OUTPUT:\n";
+    ida_solver.rubiksCube.print();
+    cout << "IDA* MOVES: ";
+    for (auto move : ida_moves) cout << object3DArray.getMove(move) << " ";
+    cout << "\nTime Taken (ms): " << ida_time << "\n";
+
+
+
+    // ==========================================================================================
+    // RubiksCubeBitboard cube;
+    // cube.print();
+    //
+    // vector<RubiksCube::MOVE> shuffle_moves = cube.randomShuffleCube(5);
+    // for (auto move: shuffle_moves) cout << cube.getMove(move) << " ";
+    // cout << "\n";
+    // cube.print();
+
+    // IDAstarSolver<RubiksCubeBitboard, HashBitboard> idAstarSolver(cube, fileName);
+    //
+    // vector<RubiksCube::MOVE> solve_moves = idAstarSolver.solve();
+    // for (auto move: solve_moves) cout << cube.getMove(move) << " ";
+    // cout << "\n";
+    // idAstarSolver.rubiksCube.print();
+
+
+    // RubiksCube3dArray object3DArray;
+    // // // RubiksCube1dArray object1dArray;
+    // //
+    // // object3DArray.print();
+    // vector<RubiksCube::MOVE>shuffle = object3DArray.randomShuffleCube((6));
+    //
+    // cout<<"AFTER SHUFFLING THE CUBE 6 TIMES: \n";
+    // object3DArray.print();
+    // cout<<"SHUFFLE MOVES THE CUBE ARE: \n";
+    // for(auto move:shuffle) cout<<object3DArray.getMove(move)<<" ";
+    // cout<<"\n";
+    // cout<<"INITIATING DFS SOVLER WITH MAX DEPTH OF 4: \n";
+    // DFSSolver<RubiksCube3dArray,Hash3d>dfs_solver(object3DArray,4);
+    // vector<RubiksCube::MOVE>dfsMoves = dfs_solver.solve();
+    // cout<<"DFS SOVLER OUTPUT: \n";
+    // dfs_solver.rubiksCube.print();
+    // cout<<"MOVES FOUND BY DFS SOLVER: \n";
+    // for(auto move:dfsMoves) cout<<object3DArray.getMove(move)<<" ";
+    // cout<<"\n";
+    // // RubiksCubeBitboard cube;
+    // // cube.print();
+    //
+    // vector<RubiksCube::MOVE> shuffle_moves = cube.randomShuffleCube(6);
+    // for(auto move: shuffle_moves) cout << cube.getMove(move) << " ";
+    // cout << "\n";
+    // cube.print();
+    //
+    // BFSSolver<RubiksCubeBitboard, HashBitboard> bfsSolver(cube);
+    // vector<RubiksCube::MOVE> solve_moves = bfsSolver.solve();
+    //
+    // for(auto move: solve_moves) cout << cube.getMove(move) << " ";
+    // cout << "\n";
+    // bfsSolver.rubiksCube.print();
 
     // object3DArray.print();
     // vector<RubiksCube::MOVE>shuffledMove =  object3DArray.randomShuffleCube(3);
@@ -244,19 +333,19 @@ int main() {
 //    iddfsSolver.rubiksCube.print();
 
 // IDA* SOLVER ---------------------------------------------------------------------------------------------------
-//    RubiksCubeBitboard cube;
-//    cube.print();
-//
-//    vector<RubiksCube::MOVE> shuffle_moves = cube.randomShuffleCube(5);
-//    for (auto move: shuffle_moves) cout << cube.getMove(move) << " ";
-//    cout << "\n";
-//    cube.print();
-//
-//    IDAstarSolver<RubiksCubeBitboard, HashBitboard> idAstarSolver(cube);
-//    vector<RubiksCube::MOVE> solve_moves = idAstarSolver.solve();
-//    for (auto move: solve_moves) cout << cube.getMove(move) << " ";
-//    cout << "\n";
-//    idAstarSolver.rubiksCube.print();
+    // RubiksCubeBitboard cube;
+    // cube.print();
+    //
+    // vector<RubiksCube::MOVE> shuffle_moves = cube.randomShuffleCube(5);
+    // for (auto move: shuffle_moves) cout << cube.getMove(move) << " ";
+    // cout << "\n";
+    // cube.print();
+    //
+    // IDAstarSolver<RubiksCubeBitboard, HashBitboard> idAstarSolver(cube);
+    // vector<RubiksCube::MOVE> solve_moves = idAstarSolver.solve();
+    // for (auto move: solve_moves) cout << cube.getMove(move) << " ";
+    // cout << "\n";
+    // idAstarSolver.rubiksCube.print();
 
 // CornerPatternDatabase Testing ---------------------------------------------------------------------------------
 
@@ -280,7 +369,7 @@ int main() {
 
 
 // CornerDBMaker Testing --------------------------------------------------------------------------
-    string fileName = "C:\\Users\\user\\CLionProjects\\rubiks-cube-solver\\Databases\\cornerDepth5V1.txt";
+    // string fileName = "C:\\Users\\user\\CLionProjects\\rubiks-cube-solver\\Databases\\cornerDepth5V1.txt";
 
     //    Code to create Corner Database
     //    CornerDBMaker dbMaker(fileName, 0x99);
